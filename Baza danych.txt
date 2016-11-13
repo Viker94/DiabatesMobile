@@ -1,0 +1,5 @@
+Adres: mysql3.gear.host
+User: appuser1
+Passwd: zaq1@WSX
+Port: 3306
+Klient: mysql workbench
