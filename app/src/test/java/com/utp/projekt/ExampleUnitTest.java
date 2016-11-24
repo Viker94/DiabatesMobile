@@ -1,4 +1,4 @@
-package com.utp.diabates;
+package com.utp.projekt;
 
 import org.junit.Test;
 

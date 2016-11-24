@@ -1,4 +1,4 @@
-package com.utp.diabates;
+package com.utp.projekt;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.utp.diabates", appContext.getPackageName());
+        assertEquals("com.utp.projekt", appContext.getPackageName());
     }
 }
