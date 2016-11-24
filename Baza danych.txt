@@ -3,4 +3,4 @@ User: appuser1
 Passwd: zaq1@WSX
 Port: 3306
 Klient: mysql workbench
-User2: dialysisapp - główne konto na bazie do którego mam dostęp. Z niego moge wszystkim zarządzać
+User2: dialysisapp - główne konto na bazie do którego mam dostęp. Z niego moge wszystkim zarządzać //~Ciesiu
