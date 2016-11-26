@@ -10,4 +10,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.utp.projekt.Activities.MainActivity">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:text="TextView"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"
+            android:textSize="30sp"
+            android:textColor="@android:color/black"
+            android:layout_width="match_parent"
+            android:textAlignment="center" />
+    </LinearLayout>
 </RelativeLayout>

@@ -15,6 +15,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.utp.projekt.Controller.Controller;
 import com.utp.projekt.Controller.OnJSONResponseCallback;
+import com.utp.projekt.Entities.User;
 import com.utp.projekt.R;
 
 import org.json.JSONException;
@@ -46,13 +47,28 @@ public class LoginActivity extends Activity {
     }
 
     public void connectToController(){
-        Controller con = new Controller();
+        final Controller con = new Controller();
         if(!login.getText().toString().equals("") && !password.getText().toString().equals(""))
             con.getSingleData("login", login.getText()+"/"+password.getText(), getApplicationContext(), new OnJSONResponseCallback() {
                 @Override
                 public void onJSONResponse(boolean success, JSONObject response) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    try {
+                        con.getSingleData("user", response.getString("id"), getApplicationContext(), new OnJSONResponseCallback() {
+                            @Override
+                            public void onJSONResponse(boolean success, JSONObject response) {
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                try {
+                                    User user = new User(response.getLong("id"), response.getString("firstName"), response.getString("lastName"), response.getDouble("potassium"), response.getDouble("water"), response.getDouble("sodium"));
+                                    intent.putExtra("USER", user);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                startActivity(intent);
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         else Toast.makeText(getApplicationContext(), "Podaj login i hasło", Toast.LENGTH_LONG).show();
