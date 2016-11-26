@@ -1,9 +1,11 @@
 package com.utp.projekt.Activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Space;
 import android.widget.TextView;
@@ -46,5 +48,10 @@ public class MainActivity extends Activity {
         tp.setText((int)((user.getPotassium()/potassiumLimit)*100) + "%");
         tw.setText((int)((user.getWater()/waterLimit)*100) + "%");
         ts.setText((int)((user.getSodium()/sodiumLimit)*100) + "%");
+    }
+
+    public void openEat(View view){
+        Intent intent = new Intent(this, EatActivity.class);
+        startActivity(intent);
     }
 }

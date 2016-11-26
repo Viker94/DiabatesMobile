@@ -1,6 +1,7 @@
 package com.utp.projekt.Controller;
 
 import android.content.Context;
+import android.os.Debug;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -51,6 +52,33 @@ public class Controller {
             }
         });
         return jsonObject;
+    }
+
+    public void update(String db, String[] params, final Context context){
+        AsyncHttpClient client = new AsyncHttpClient();
+        String url = "http://10.0.2.2:8080/" + db;
+        for(String param : params){
+            url+="/" + param;
+        }
+        url += "/";
+        Log.i("asd", url);
+        client.get(url, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                if(statusCode == 404){
+                    Toast.makeText(context, "Nie znaleziono źródła", Toast.LENGTH_LONG).show();
+                } else if(statusCode == 500){
+                    Toast.makeText(context, "Błąd serwera", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "Nieoczekiwany błąd", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
 }
