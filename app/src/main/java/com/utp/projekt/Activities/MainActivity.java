@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Space;
 import android.widget.TextView;
@@ -23,19 +24,28 @@ public class MainActivity extends Activity {
     private TextView tw;
     private TextView ts;
     private Space spacer;
+    private Button buttonLimit;
 
     private int waterLimit = 100;
     private int potassiumLimit = 100;
     private int sodiumLimit = 100;
 
+    public static User user;
+
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        User user = getIntent().getParcelableExtra("USER");
+        user = getIntent().getParcelableExtra("USER");
         Log.i("asd", user.getPotassium() + "");
         name = (TextView) findViewById(R.id.name);
         name.setText("Witaj: " + user.getFirstName() + " " + user.getLastName());
+        buttonLimit = (Button) findViewById(R.id.limit);
         pp = (ProgressBar) findViewById(R.id.pPotassium);
         pw = (ProgressBar) findViewById(R.id.pWater);
         ps = (ProgressBar) findViewById(R.id.pSodium);
@@ -48,10 +58,19 @@ public class MainActivity extends Activity {
         tp.setText((int)((user.getPotassium()/potassiumLimit)*100) + "%");
         tw.setText((int)((user.getWater()/waterLimit)*100) + "%");
         ts.setText((int)((user.getSodium()/sodiumLimit)*100) + "%");
-    }
 
-    public void openEat(View view){
-        Intent intent = new Intent(this, EatActivity.class);
+        buttonLimit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startLimitActivity();
+            }
+        });
+
+    }
+    public void startLimitActivity()
+    {
+        Intent intent = new Intent(MainActivity.this, LimitActivity.class);
+        //intent.putExtra("USER", user);
         startActivity(intent);
     }
 }

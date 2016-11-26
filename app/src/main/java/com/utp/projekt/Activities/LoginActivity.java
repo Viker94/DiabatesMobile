@@ -31,6 +31,7 @@ public class LoginActivity extends Activity {
     private EditText password;
     private Button loginButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +61,7 @@ public class LoginActivity extends Activity {
                             public void onJSONResponse(boolean success, JSONObject response) {
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 try {
-                                    User user = new User(response.getLong("id"), response.getString("firstName"), response.getString("lastName"), response.getDouble("potassium"), response.getDouble("water"), response.getDouble("sodium"));
+                                    User user = new User(response.getLong("id"), response.getString("firstName"), response.getString("lastName"), response.getDouble("potassium"), response.getDouble("water"), response.getDouble("sodium"), response.getDouble("limitPotassium"), response.getDouble("limitWater"), response.getDouble("limitSodium"));
                                     intent.putExtra("USER", user);
                                 } catch (JSONException e) {
                                     e.printStackTrace();

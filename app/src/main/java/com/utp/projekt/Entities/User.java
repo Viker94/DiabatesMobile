@@ -14,14 +14,20 @@ public class User implements Parcelable{
     private double potassium;
     private double water;
     private double sodium;
+    private double limitPotassium;
+    private double limitWater;
+    private double limitSodium;
 
-    public User(Long id, String firstName, String lastName, double potassium, double water, double sodium) {
+    public User(Long id, String firstName, String lastName, double potassium, double water, double sodium, double limitPotassium, double limitWater, double limitSodium) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.potassium = potassium;
         this.water = water;
         this.sodium = sodium;
+        this.limitPotassium = limitPotassium;
+        this.limitWater = limitWater;
+        this.limitSodium = limitSodium;
     }
 
     public User(Parcel parcel){
@@ -31,6 +37,9 @@ public class User implements Parcelable{
         this.potassium = parcel.readDouble();
         this.water = parcel.readDouble();
         this.sodium = parcel.readDouble();
+        this.limitPotassium = parcel.readDouble();
+        this.limitWater = parcel.readDouble();
+        this.limitSodium = parcel.readDouble();
     }
 
     public Long getId() {
@@ -80,6 +89,29 @@ public class User implements Parcelable{
     public void setSodium(double sodium) {
         this.sodium = sodium;
     }
+    public double getLimitPotassium() {
+        return limitPotassium;
+    }
+
+    public void setLimitPotassium(double limitPotassium) {
+        this.limitPotassium = limitPotassium;
+    }
+
+    public double getLimitWater() {
+        return limitWater;
+    }
+
+    public void setLimitWater(double limitWater) {
+        this.limitWater = limitWater;
+    }
+
+    public double getLimitSodium() {
+        return limitSodium;
+    }
+
+    public void setLimitSodium(double limitSodium) {
+        this.limitSodium = limitSodium;
+    }
 
     @Override
     public int describeContents() {
@@ -94,6 +126,9 @@ public class User implements Parcelable{
         parcel.writeDouble(potassium);
         parcel.writeDouble(water);
         parcel.writeDouble(sodium);
+        parcel.writeDouble(limitPotassium);
+        parcel.writeDouble(limitWater);
+        parcel.writeDouble(limitSodium);
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Creator<User>() {
