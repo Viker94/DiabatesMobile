@@ -26,9 +26,6 @@ public class MainActivity extends Activity {
     private Space spacer;
     private Button buttonLimit;
 
-    private int waterLimit = 100;
-    private int potassiumLimit = 100;
-    private int sodiumLimit = 100;
 
     public static User user;
 
@@ -47,12 +44,12 @@ public class MainActivity extends Activity {
         tp = (TextView) findViewById(R.id.ppPotassium);
         tw = (TextView) findViewById(R.id.ppWater);
         ts = (TextView) findViewById(R.id.ppSodium);
-        pp.setProgress((int)((user.getPotassium()/100)*100));
-        pw.setProgress((int)((user.getWater()/100)*100));
-        ps.setProgress((int)((user.getSodium()/100)*100));
-        tp.setText((int)((user.getPotassium()/potassiumLimit)*100) + "%");
-        tw.setText((int)((user.getWater()/waterLimit)*100) + "%");
-        ts.setText((int)((user.getSodium()/sodiumLimit)*100) + "%");
+        pp.setProgress((int)((user.getPotassium()/user.getLimitPotassium())*100));
+        pw.setProgress((int)((user.getWater()/user.getLimitWater())*100));
+        ps.setProgress((int)((user.getSodium()/user.getLimitSodium())*100));
+        tp.setText((int)((user.getPotassium()/user.getLimitPotassium())*100) + "%");
+        tw.setText((int)((user.getWater()/user.getLimitWater())*100) + "%");
+        ts.setText((int)((user.getSodium()/user.getLimitSodium())*100) + "%");
 
         buttonLimit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +59,15 @@ public class MainActivity extends Activity {
         });
 
     }
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        this.onCreate(null);
+    }
+
+
+
     public void startLimitActivity()
     {
         Intent intent = new Intent(MainActivity.this, LimitActivity.class);
