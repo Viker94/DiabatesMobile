@@ -1,14 +1,26 @@
 package com.utp.projekt.Activities;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.gson.Gson;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.utp.projekt.Controller.Controller;
+import com.utp.projekt.Entities.Products;
 import com.utp.projekt.R;
 
-public class EatActivity extends Activity {
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import cz.msebera.android.httpclient.Header;
+
+public class EatActivity extends Activity{
+
+    JSONArray array;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,9 +29,16 @@ public class EatActivity extends Activity {
     }
 
     public void add(View view){
-
-        Controller con = new Controller();
-        String[] tab = {"1", "4", "7", "2"};
-        con.update("user", tab, getApplicationContext());
+        Controller.callServiceJSON("products", new String[0], new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Intent intent = new Intent(EatActivity.this, ProductsActivity.class);
+                Gson gson = new Gson();
+                Products[] tab = gson.fromJson(response.toString(), Products[].class);
+                ArrayList<Products> list = new ArrayList<Products>(Arrays.asList(tab));
+                intent.putExtra("TAB", list);
+                startActivity(intent);
+            }
+        });
     }
 }

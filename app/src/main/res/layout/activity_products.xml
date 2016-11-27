@@ -10,24 +10,204 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.utp.projekt.Activities.ProductsActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:weightSum="100">
+        android:fillViewport="true">
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:weightSum="120"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="28"
+                android:weightSum="100"
+                style="?android:attr/buttonBarStyle">
 
+                <Button
+                    android:text="@string/owoce"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fruit"
+                    android:layout_weight="25"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:textSize="12sp"
+                    android:onClick="fruit"/>
+
+                <Button
+                    android:text="@string/warzywa"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/vege"
+                    android:layout_weight="25"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:textSize="12sp"
+                    android:onClick="vege"/>
+
+                <Button
+                    android:text="@string/nabia"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/dairy"
+                    android:layout_weight="25"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:textSize="12sp"
+                    android:onClick="dairy"/>
+
+                <Button
+                    android:text="@string/pieczywo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/bread"
+                    android:layout_weight="25"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:textSize="12sp"
+                    android:onClick="bread"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="28"
+                android:weightSum="100"
+                style="?android:attr/buttonBarStyle">
+
+                <Button
+                    android:text="@string/mi_so"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/meat"
+                    android:layout_weight="25"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:textSize="12sp"
+                    android:onClick="meat"/>
+
+                <Button
+                    android:text="@string/kasze"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/cereal"
+                    android:layout_weight="25"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:textSize="12sp"
+                    android:onClick="cereal"/>
+
+                <Button
+                    android:text="@string/s_odycze"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/sweat"
+                    android:layout_weight="25"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:textSize="12sp"
+                    android:onClick="sweats"/>
+
+                <Button
+                    android:text="@string/inne"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/other"
+                    android:layout_weight="25"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:textSize="12sp"
+                    android:onClick="other"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="27">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPersonName"
+                    android:text="Szukaj"
+                    android:ems="10"
+                    android:id="@+id/search"
+                    android:layout_weight="0"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="27"
+                android:weightSum="100">
+
+                <TextView
+                    android:text="Nazwa"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textView5"
+                    android:layout_weight="20"
+                    android:gravity="center_vertical"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:text="Potas"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textView4"
+                    android:layout_weight="20"
+                    android:gravity="center_vertical"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:text="Woda"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textView3"
+                    android:layout_weight="20"
+                    android:gravity="center_vertical"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:text="Sód"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textView2"
+                    android:layout_weight="20"
+                    android:gravity="center_vertical"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:text="Kategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textView"
+                    android:layout_weight="20"
+                    android:gravity="center_vertical"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/list" >
+
+            </ListView>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
+
+
+
 </RelativeLayout>

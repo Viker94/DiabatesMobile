@@ -1,18 +1,20 @@
 package com.utp.projekt.Activities;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Space;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.utp.projekt.Controller.Controller;
 import com.utp.projekt.Entities.User;
 import com.utp.projekt.R;
+
+import cz.msebera.android.httpclient.Header;
 
 public class LimitActivity extends Activity {
 
@@ -68,14 +70,23 @@ public class LimitActivity extends Activity {
         temp.setLimitWater((Double.valueOf(tbWater.getText().toString())));
         temp.setLimitSodium((Double.valueOf(tbSodium.getText().toString())));
         MainActivity.user = temp;
-        Controller con = new Controller();
         String[] params = new String[4];
         params[0] = String.valueOf(MainActivity.user.getId());
         params[1] = String.valueOf(MainActivity.user.getLimitPotassium());
         params[2] = String.valueOf(MainActivity.user.getLimitWater());
         params[3] = String.valueOf(MainActivity.user.getLimitSodium());
 
-        con.update("user",params,getApplicationContext());
+        Controller.callServicAsync("user",params,new AsyncHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                Toast.makeText(getApplicationContext(), "Zapisano limity", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Controller.failure(statusCode,getApplicationContext());
+            }
+        });
 
         onBackPressed();
         //con.update("user",MainActivity.getUser().getId().toString(),MainActivity.getUser().getLimitPotassium(),MainActivity.getUser().getLimitWater(),MainActivity.getUser().getLimitSodium());

@@ -32,11 +32,6 @@ public class MainActivity extends Activity {
 
     public static User user;
 
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +66,11 @@ public class MainActivity extends Activity {
     {
         Intent intent = new Intent(MainActivity.this, LimitActivity.class);
         //intent.putExtra("USER", user);
+        startActivity(intent);
+    }
+
+    public void openEat(View view){
+        Intent intent = new Intent(MainActivity.this, EatActivity.class);
         startActivity(intent);
     }
 }

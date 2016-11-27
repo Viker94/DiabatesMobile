@@ -14,4 +14,12 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="owoce">Owoce</string>
+    <string name="nabia">Nabiał</string>
+    <string name="pieczywo">Pieczywo</string>
+    <string name="warzywa">Warzywa</string>
+    <string name="inne">Inne</string>
+    <string name="kasze">Kasze</string>
+    <string name="mi_so">Mięso</string>
+    <string name="s_odycze">Słodycze</string>
 </resources>

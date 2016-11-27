@@ -3,25 +3,20 @@ package com.utp.projekt.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.google.gson.Gson;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.utp.projekt.Controller.Controller;
-import com.utp.projekt.Controller.OnJSONResponseCallback;
 import com.utp.projekt.Entities.User;
 import com.utp.projekt.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.nio.charset.StandardCharsets;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -50,30 +45,44 @@ public class LoginActivity extends Activity {
     }
 
     public void connectToController(){
-        final Controller con = new Controller();
-        if(!login.getText().toString().equals("") && !password.getText().toString().equals(""))
-            con.getSingleData("login", login.getText()+"/"+password.getText(), getApplicationContext(), new OnJSONResponseCallback() {
+        if(!login.getText().toString().equals("") && !password.getText().toString().equals("")) {
+            final String[] params = {login.getText().toString(), password.getText().toString()};
+            Controller.callServiceJSON("login", params, new JsonHttpResponseHandler(){
                 @Override
-                public void onJSONResponse(boolean success, JSONObject response) {
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    String[] params2;
                     try {
-                        con.getSingleData("user", response.getString("id"), getApplicationContext(), new OnJSONResponseCallback() {
+                        params2 = new String[]{response.getLong("id") + ""};
+                        Controller.callServiceJSON("user", params2, new JsonHttpResponseHandler(){
                             @Override
-                            public void onJSONResponse(boolean success, JSONObject response) {
+                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                Gson gson = new Gson();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                try {
-                                    User user = new User(response.getLong("id"), response.getString("firstName"), response.getString("lastName"), response.getDouble("potassium"), response.getDouble("water"), response.getDouble("sodium"), response.getDouble("limitPotassium"), response.getDouble("limitWater"), response.getDouble("limitSodium"));
-                                    intent.putExtra("USER", user);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                User user = gson.fromJson(response.toString(), User.class);
+                                intent.putExtra("USER", user);
                                 startActivity(intent);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                Controller.failure(statusCode, getApplicationContext());
                             }
                         });
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    if(statusCode == 200){
+                        Toast.makeText(getApplicationContext(), "Niepoprawny login lub hasło", Toast.LENGTH_LONG).show();
+                    } else {
+                        Controller.failure(statusCode, getApplicationContext());
+                    }
+                }
             });
+        }
         else Toast.makeText(getApplicationContext(), "Podaj login i hasło", Toast.LENGTH_LONG).show();
     }
 

@@ -25,8 +25,9 @@
         </activity>
         <activity android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.EatActivity" />
-        <activity android:name=".Activities.ProductsActivity"/>
-        <activity android:name=".Activities.LimitActivity"></activity>
+        <activity android:name=".Activities.ProductsActivity" android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".Activities.LimitActivity" >
+        </activity>
     </application>
 
 </manifest>

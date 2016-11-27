@@ -1,83 +1,42 @@
 package com.utp.projekt.Controller;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.nio.charset.StandardCharsets;
-
-import cz.msebera.android.httpclient.Header;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 /**
- * Created by Marcin on 26.11.2016.
+ * Created by Marcin on 27.11.2016.
  */
+
 public class Controller {
+    private static AsyncHttpClient client = new AsyncHttpClient();
 
-    private static JSONObject jsonObject;
-
-    public JSONObject getSingleData(String table, String data , final Context context, final OnJSONResponseCallback callback){
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://10.0.2.2:8080/" + table + "/" + data, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String string = new String(responseBody, StandardCharsets.UTF_8);
-                try {
-                    if(string.length()>0) {
-                        jsonObject = new JSONObject(string);
-                        callback.onJSONResponse(true, jsonObject);
-                    } else {
-                        Toast.makeText(context, "Złe dane logowania", Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                if(statusCode == 404){
-                    Toast.makeText(context, "Nie znaleziono źródła", Toast.LENGTH_LONG).show();
-                } else if(statusCode == 500){
-                    Toast.makeText(context, "Błąd serwera", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(context, "Nieoczekiwany błąd", Toast.LENGTH_LONG).show();
-                }
-            }
-
-
-        });
-        return jsonObject;
-    }
-    public void update(String db, String[] params, final Context context){
-        AsyncHttpClient client = new AsyncHttpClient();
-        String url = "http://localhost:8080/" + db;
+    public static void callServiceJSON(String db, String [] params, JsonHttpResponseHandler handler){
+        String url = "http://83.23.87.213:10125/" + db;
         for(String param : params){
             url+="/" + param;
         }
-        url += "/";
-        client.get(url, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                if(statusCode == 404){
-                    Toast.makeText(context, "Nie znaleziono źródła", Toast.LENGTH_LONG).show();
-                } else if(statusCode == 500){
-                    Toast.makeText(context, "Błąd serwera", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(context, "Nieoczekiwany błąd", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        client.get(url, handler);
     }
 
+    public static void callServicAsync(String db, String [] params, AsyncHttpResponseHandler handler){
+        String url = "http://83.23.87.213:10125/" + db;
+        for(String param : params){
+            url+="/" + param;
+        }
+        client.get(url, handler);
+    }
+
+    public static void failure(int statusCode, Context context){
+        if(statusCode == 404){
+            Toast.makeText(context, "Nie znaleziono źródła", Toast.LENGTH_LONG).show();
+        } else if(statusCode == 500){
+            Toast.makeText(context, "Błąd serwera", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(context, "Nieoczekiwany błąd", Toast.LENGTH_LONG).show();
+        }
+    }
 }
