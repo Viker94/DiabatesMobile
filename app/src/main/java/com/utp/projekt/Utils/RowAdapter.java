@@ -18,6 +18,7 @@ import com.utp.projekt.Entities.Products;
 import com.utp.projekt.R;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -29,14 +30,23 @@ public class RowAdapter extends ArrayAdapter<Products> implements Filterable{
     private Context context;
     private int resource;
     private List<Products> products;
-    private List<Products> filtered;
+    private int previousLenght = 0;
+    private List<Products> originalData = new ArrayList<>();
+    private RowFilter filter;
 
     public RowAdapter(Context context, int resource, List<Products> objects) {
         super(context, resource, objects);
         this.context =context;
         this.resource = resource;
         this.products = objects;
-        this.filtered = objects;
+        cloneItems(products);
+    }
+
+    protected void cloneItems(List<Products> items){
+        for(Iterator iterator = items.iterator(); iterator.hasNext(); ){
+            Products p = (Products) iterator.next();
+            originalData.add(p);
+        }
     }
 
 
@@ -94,53 +104,64 @@ public class RowAdapter extends ArrayAdapter<Products> implements Filterable{
     @NonNull
     @Override
     public Filter getFilter() {
-        Filter filter = new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-                FilterResults results = new FilterResults();
-                if(charSequence == null || charSequence.length() == 0){
-                    results.values = products;
-                    results.count = products.size();
-                } else {
-                    if(charSequence.toString().startsWith("category")){
-                        List<Products> nProducts = new ArrayList<>();
-                        for (Products p : products) {
-                            String cat = charSequence.toString().substring(8, charSequence.toString().length());
-                            int category = Integer.parseInt(cat);
-                            for(Products pr : products){
-                                if(pr.getCategory() == category) nProducts.add(pr);
-                            }
-                        }
-                        results.values = nProducts;
-                        results.count = nProducts.size();
-                    } else {
-                        List<Products> nProducts = new ArrayList<>();
-                        for (Products p : products) {
-                            if (p.getName().toLowerCase().startsWith(charSequence.toString()))
-                                nProducts.add(p);
-                        }
-                        results.values = nProducts;
-                        results.count = nProducts.size();
-                    }
-                }
-                return results;
-            }
-
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                if(filterResults.count == 0){
-                    notifyDataSetInvalidated();
-                } else {
-                    products = (List<Products>) filterResults.values;
-                    notifyDataSetChanged();
-                }
-            }
-        };
+        if(filter == null){
+            filter = new RowFilter();
+        }
         return filter;
     }
 
     @Override
     public int getCount() {
         return products.size();
+    }
+
+    private class RowFilter extends Filter{
+
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            FilterResults results = new FilterResults();
+            if(charSequence == null || charSequence.length() == 0){
+                results.values = originalData;
+                results.count = originalData.size();
+            } else {
+                if(charSequence.toString().startsWith("category")){
+                    List<Products> nProducts = new ArrayList<>();
+                    ArrayList<Products> local = new ArrayList<>();
+                    local.addAll(originalData);
+                    String cat = charSequence.toString().substring(8, charSequence.toString().length());
+                    int category = Integer.parseInt(cat);
+                    for(Products pr : local){
+                        if(pr.getCategory() == category) nProducts.add(pr);
+                    }
+                    results.values = nProducts;
+                    results.count = nProducts.size();
+                } else {
+                    List<Products> nProducts = new ArrayList<>();
+                    ArrayList<Products> local = new ArrayList<>();
+                    local.addAll(originalData);
+                    for (Products p : local) {
+                        if (p.getName().toLowerCase().startsWith(charSequence.toString()))
+                            nProducts.add(p);
+                    }
+                    results.values = nProducts;
+                    results.count = nProducts.size();
+                }
+            }
+            return results;        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            if(filterResults.count == 0){
+                notifyDataSetInvalidated();
+            } else {
+                ArrayList<Products> local = (ArrayList<Products>) filterResults.values;
+                notifyDataSetChanged();
+                clear();
+                for(Iterator iterator = local.iterator(); iterator.hasNext();){
+                    Products p = (Products) iterator.next();
+                    add(p);
+                }
+            }
+        }
     }
 }

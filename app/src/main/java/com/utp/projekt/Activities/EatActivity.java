@@ -37,7 +37,7 @@ public class EatActivity extends Activity{
                 Products[] tab = gson.fromJson(response.toString(), Products[].class);
                 ArrayList<Products> list = new ArrayList<Products>(Arrays.asList(tab));
                 intent.putExtra("TAB", list);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
     }

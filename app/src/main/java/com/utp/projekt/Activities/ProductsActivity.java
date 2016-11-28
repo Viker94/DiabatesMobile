@@ -1,14 +1,21 @@
 package com.utp.projekt.Activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.utp.projekt.Entities.Products;
 import com.utp.projekt.R;
@@ -17,6 +24,7 @@ import com.utp.projekt.Utils.RowAdapter;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class ProductsActivity extends Activity{
@@ -33,6 +41,7 @@ public class ProductsActivity extends Activity{
     private ArrayAdapter<Products> adapter;
     private static ArrayList<Products> products = new ArrayList<>();
     private EditText search;
+    HashMap<Products, Integer> map = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +76,37 @@ public class ProductsActivity extends Activity{
 
             }
         });
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final Products p = (Products) adapterView.getItemAtPosition(i);
+                AlertDialog.Builder alert = new AlertDialog.Builder(ProductsActivity.this);
+                alert.setTitle("Wybierz ilość");
+                final EditText input = new EditText(ProductsActivity.this);
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                input.setRawInputType(Configuration.KEYBOARD_12KEY);
+                alert.setView(input);
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        map = new HashMap<Products, Integer>();
+                        if(map.containsValue(p)){
+                            map.put(p, map.get(p) + Integer.parseInt(input.getText().toString()));
+                        } else {
+                            map.put(p, Integer.parseInt(input.getText().toString()));
+                        }
+                    }
+                });
+                alert.setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                alert.show();
+            }
+        });
+        Log.i("asd", map.toString());
     }
 
     public void fruit(View view){

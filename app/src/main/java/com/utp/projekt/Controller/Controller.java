@@ -1,6 +1,7 @@
 package com.utp.projekt.Controller;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -13,9 +14,11 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class Controller {
     private static AsyncHttpClient client = new AsyncHttpClient();
+    private static String ip = "http://83.25.152.42:10125/";
+
 
     public static void callServiceJSON(String db, String [] params, JsonHttpResponseHandler handler){
-        String url = "http://83.23.87.213:10125/" + db;
+        String url = ip + db;
         for(String param : params){
             url+="/" + param;
         }
@@ -23,7 +26,7 @@ public class Controller {
     }
 
     public static void callServicAsync(String db, String [] params, AsyncHttpResponseHandler handler){
-        String url = "http://83.23.87.213:10125/" + db;
+        String url = ip + db;
         for(String param : params){
             url+="/" + param;
         }
