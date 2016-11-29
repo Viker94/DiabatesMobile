@@ -4,7 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.jjoe64.graphview.GraphView;
@@ -24,15 +29,17 @@ import java.util.HashMap;
 
 import cz.msebera.android.httpclient.Header;
 
-public class GraphActivity extends Activity {
+public class GraphActivity extends Fragment {
+
     LineGraphSeries<DataPoint> potassiumLimit;
     LineGraphSeries<DataPoint> potassium;
     LineGraphSeries<DataPoint> sodiumLimit;
     LineGraphSeries<DataPoint> sodium;
     LineGraphSeries<DataPoint> waterLimit;
     LineGraphSeries<DataPoint> water;
+    HashMap<Integer,Double[]> map;
 
-
+    GraphView graph;
 
 
     double Ypotassium = 0;
@@ -45,12 +52,18 @@ public class GraphActivity extends Activity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_graph);
-        user =  getIntent().getParcelableExtra("USER");
+
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_graph, container, false);
+        user = getActivity().getIntent().getParcelableExtra("USER");
         Log.i("GRAPH1", user.getConsumptions().get(0).toString());
-        GraphView graph = (GraphView) findViewById(R.id.graph);
+        GraphView graph = (GraphView) rootView.findViewById(R.id.graph);
         Log.i("GRAPH2", user.getConsumptions().get(0).toString());
 
         /*Potas - kolor czerwony*/
@@ -79,14 +92,39 @@ public class GraphActivity extends Activity {
         /* Koniec DataPointow */
         Log.i("GRAPH3", user.getConsumptions().get(0).toString());
 
-
+        map = new HashMap<Integer,Double[]>();
         double x = user.getConsumptions().get(0).getProduct().getSodium();
-
+        Date today = new Date();
+        int day = 0;
         Log.i("asd", user.getClass().toString() + " " + user.getConsumptions().getClass().toString());
-        potassium.appendData(new DataPoint(1, x),false,100);
+        for(Consumption c : user.getConsumptions())
+        {
+            Log.i("AppendData", c.getProduct().toString());
+            Log.i("Dni",getDays(c.getDate())+"");
+            day = getDays(today)-getDays(c.getDate());
+            if(map.containsKey(day))
+            {
+                Double[] doubles = new Double[3];
+                doubles[0] = map.get(day)[0]+(c.getAmount()*c.getProduct().getPotassium());
+                doubles[1] = map.get(day)[1]+(c.getAmount()*c.getProduct().getSodium());
+                doubles[2] = map.get(day)[2]+(c.getAmount()*c.getProduct().getWater());
+                map.put(day,doubles);
+                Log.i("add",day+"P: "+doubles[0]+"S: "+doubles[1]+"W: "+doubles[2]);
+            }
+            else
+            {
+                Double[] doubles = new Double[3];
+                doubles[0] = c.getAmount()*c.getProduct().getPotassium();
+                doubles[1] = c.getAmount()*c.getProduct().getSodium();
+                doubles[2] = c.getAmount()*c.getProduct().getWater();
+                map.put(day,doubles);
+                Log.i("new",day+"P: "+doubles[0]+"S: "+doubles[1]+"W: "+doubles[2]);
+            }
+            potassium.appendData(new DataPoint(getDays(new Date())-getDays(c.getDate()), c.getProduct().getPotassium()),false,100);
+        }
+        //potassium.appendData(new DataPoint(1, x),false,100);
+        //potassium.appendData(new DataPoint(10, x),false,100);
         graph.addSeries(potassium);
-
-
-
+        return rootView;
     }
 }

@@ -2,10 +2,13 @@ package com.utp.projekt.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Space;
@@ -14,7 +17,11 @@ import android.widget.TextView;
 import com.utp.projekt.Entities.User;
 import com.utp.projekt.R;
 
-public class MainActivity extends Activity {
+/**
+ * Created by Marcin on 29.11.2016.
+ */
+
+public class MainActivity extends Fragment {
 
     private TextView name; //przywitanie
     private ProgressBar pp; //progress bary dla potasu, wody i sodu
@@ -25,27 +32,50 @@ public class MainActivity extends Activity {
     private TextView ts;
     private Space spacer;
     private Button buttonLimit;
-    private Button tempButton;
+    private Button eat;
 
 
     public static User user;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
-        user = getIntent().getParcelableExtra("USER");
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.onCreate(null);
+    }
+
+
+    public void startLimitActivity()
+    {
+        Intent intent = new Intent(getActivity(), LimitActivity.class);
+        intent.putExtra("USER", user);
+        startActivity(intent);
+    }
+
+    public void openEat(){
+        Intent intent = new Intent(getActivity(), EatActivity.class);
+        startActivity(intent);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_main2, container, false);
+        user = getActivity().getIntent().getParcelableExtra("USER");
         Log.i("MAIN", user.getConsumptions().get(0).toString());
-        name = (TextView) findViewById(R.id.name);
+        name = (TextView) rootView.findViewById(R.id.name);
         name.setText("Witaj: " + user.getFirstName() + " " + user.getLastName());
-        buttonLimit = (Button) findViewById(R.id.limit);
-        tempButton = (Button) findViewById(R.id.tempGraph);
-        pp = (ProgressBar) findViewById(R.id.pPotassium);
-        pw = (ProgressBar) findViewById(R.id.pWater);
-        ps = (ProgressBar) findViewById(R.id.pSodium);
-        tp = (TextView) findViewById(R.id.ppPotassium);
-        tw = (TextView) findViewById(R.id.ppWater);
-        ts = (TextView) findViewById(R.id.ppSodium);
+        buttonLimit = (Button) rootView.findViewById(R.id.limit);
+        eat = (Button) rootView.findViewById(R.id.eat);
+        pp = (ProgressBar) rootView.findViewById(R.id.pPotassium);
+        pw = (ProgressBar) rootView.findViewById(R.id.pWater);
+        ps = (ProgressBar) rootView.findViewById(R.id.pSodium);
+        tp = (TextView) rootView.findViewById(R.id.ppPotassium);
+        tw = (TextView) rootView.findViewById(R.id.ppWater);
+        ts = (TextView) rootView.findViewById(R.id.ppSodium);
         pp.setProgress((int)((user.getPotassium()/user.getLimitPotassium())*100));
         pw.setProgress((int)((user.getWater()/user.getLimitWater())*100));
         ps.setProgress((int)((user.getSodium()/user.getLimitSodium())*100));
@@ -59,37 +89,12 @@ public class MainActivity extends Activity {
                 startLimitActivity();
             }
         });
-
-        tempButton.setOnClickListener(new View.OnClickListener() {
+        eat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startGraphActivity();
+                openEat();
             }
         });
-    }
-    @Override
-    protected void onResume() {
-
-        super.onResume();
-        this.onCreate(null);
-    }
-    public void startGraphActivity()
-    {
-        Intent intent = new Intent(MainActivity.this, GraphActivity.class);
-        intent.putExtra("USER", user);
-        startActivity(intent);
-    }
-
-
-    public void startLimitActivity()
-    {
-        Intent intent = new Intent(MainActivity.this, LimitActivity.class);
-        intent.putExtra("USER", user);
-        startActivity(intent);
-    }
-
-    public void openEat(View view){
-        Intent intent = new Intent(MainActivity.this, EatActivity.class);
-        startActivity(intent);
+        return rootView;
     }
 }
