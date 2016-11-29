@@ -89,11 +89,12 @@ public class ProductsActivity extends Activity{
                 alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        map = new HashMap<Products, Integer>();
-                        if(map.containsValue(p)){
-                            map.put(p, map.get(p) + Integer.parseInt(input.getText().toString()));
+                        if(EatActivity.map.containsKey(p)){
+                            EatActivity.map.put(p, EatActivity.map.get(p) + Integer.parseInt(input.getText().toString()));
+                            Log.i(">>>>>>>>","Poszło");
                         } else {
-                            map.put(p, Integer.parseInt(input.getText().toString()));
+                            Log.i(">>>>>>>>>>>>>>>>>>>>>.","Znowu nie działa");
+                            EatActivity.map.put(p, Integer.parseInt(input.getText().toString()));
                         }
                     }
                 });

@@ -59,6 +59,7 @@ public class MainActivity extends Fragment {
 
     public void openEat(){
         Intent intent = new Intent(getActivity(), EatActivity.class);
+        intent.putExtra("USER", user);
         startActivity(intent);
     }
 
