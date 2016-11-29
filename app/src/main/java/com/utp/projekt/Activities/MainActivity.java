@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
     private TextView ts;
     private Space spacer;
     private Button buttonLimit;
+    private Button tempButton;
 
 
     public static User user;
@@ -38,6 +39,7 @@ public class MainActivity extends Activity {
         name = (TextView) findViewById(R.id.name);
         name.setText("Witaj: " + user.getFirstName() + " " + user.getLastName());
         buttonLimit = (Button) findViewById(R.id.limit);
+        tempButton = (Button) findViewById(R.id.tempGraph);
         pp = (ProgressBar) findViewById(R.id.pPotassium);
         pw = (ProgressBar) findViewById(R.id.pWater);
         ps = (ProgressBar) findViewById(R.id.pSodium);
@@ -58,6 +60,13 @@ public class MainActivity extends Activity {
             }
         });
 
+        tempButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startGraphActivity();
+            }
+        });
+
     }
     @Override
     protected void onResume() {
@@ -65,13 +74,18 @@ public class MainActivity extends Activity {
         super.onResume();
         this.onCreate(null);
     }
-
+    public void startGraphActivity()
+    {
+        Intent intent = new Intent(MainActivity.this, GraphActivity.class);
+        intent.putExtra("USER", user);
+        startActivity(intent);
+    }
 
 
     public void startLimitActivity()
     {
         Intent intent = new Intent(MainActivity.this, LimitActivity.class);
-        //intent.putExtra("USER", user);
+        intent.putExtra("USER", user);
         startActivity(intent);
     }
 
