@@ -2,6 +2,7 @@ package com.utp.projekt.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.utp.projekt.Entities.User;
 import com.utp.projekt.R;
+import com.utp.projekt.Utils.Helper;
 
 /**
  * Created by Marcin on 29.11.2016.
@@ -76,6 +78,10 @@ public class MainActivity extends Fragment {
         tp = (TextView) rootView.findViewById(R.id.ppPotassium);
         tw = (TextView) rootView.findViewById(R.id.ppWater);
         ts = (TextView) rootView.findViewById(R.id.ppSodium);
+        pp.setProgressTintList(ColorStateList.valueOf(Helper.POTASSIUM_COLOR));
+        pw.setProgressTintList(ColorStateList.valueOf(Helper.WATER_COLOR));
+        ps.setProgressTintList(ColorStateList.valueOf(Helper.SODIUM_COLOR));
+
         pp.setProgress((int)((user.getPotassium()/user.getLimitPotassium())*100));
         pw.setProgress((int)((user.getWater()/user.getLimitWater())*100));
         ps.setProgress((int)((user.getSodium()/user.getLimitSodium())*100));

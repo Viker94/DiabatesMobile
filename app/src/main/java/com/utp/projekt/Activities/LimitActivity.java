@@ -13,6 +13,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.utp.projekt.Controller.Controller;
 import com.utp.projekt.Entities.User;
 import com.utp.projekt.R;
+import com.utp.projekt.Utils.Helper;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -42,6 +43,9 @@ public class LimitActivity extends Activity {
         buttonSave = (Button) findViewById(R.id.buttonSave);
         buttonCancel = (Button) findViewById(R.id.buttonCancel);
         polandCanIntoSpace = (Space) findViewById(R.id.polandCanIntoSpace);
+        textWater.setTextColor(Helper.WATER_COLOR);
+        textSodium.setTextColor(Helper.SODIUM_COLOR);
+        textPotassium.setTextColor(Helper.POTASSIUM_COLOR);
         tbWater.setText(MainActivity.user.getLimitWater()+"");
         tbSodium.setText(MainActivity.user.getLimitSodium()+"");
         tbPotassium.setText(MainActivity.user.getLimitPotassium()+"");
