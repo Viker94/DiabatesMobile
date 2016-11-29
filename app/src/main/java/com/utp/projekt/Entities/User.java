@@ -3,6 +3,8 @@ package com.utp.projekt.Entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by Marcin on 26.11.2016.
  */
@@ -17,8 +19,19 @@ public class User implements Parcelable{
     private double limitPotassium;
     private double limitWater;
     private double limitSodium;
+    private ArrayList<Consumption> consumptions;
 
-    public User(Long id, String firstName, String lastName, double potassium, double water, double sodium, double limitPotassium, double limitWater, double limitSodium) {
+    public ArrayList<Consumption> getConsumptions() {
+        return consumptions;
+    }
+
+    public void setConsumptions(ArrayList<Consumption> consumptions) {
+        this.consumptions = consumptions;
+    }
+
+
+
+    public User(Long id, String firstName, String lastName, double potassium, double water, double sodium, double limitPotassium, double limitWater, double limitSodium, ArrayList<Consumption> consumptions) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -28,6 +41,7 @@ public class User implements Parcelable{
         this.limitPotassium = limitPotassium;
         this.limitWater = limitWater;
         this.limitSodium = limitSodium;
+        this.consumptions = consumptions;
     }
 
     public User(Parcel parcel){
@@ -40,6 +54,8 @@ public class User implements Parcelable{
         this.limitPotassium = parcel.readDouble();
         this.limitWater = parcel.readDouble();
         this.limitSodium = parcel.readDouble();
+        consumptions = new ArrayList<>();
+        parcel.readList(consumptions, Consumption.class.getClassLoader());
     }
 
     public Long getId() {
@@ -129,6 +145,7 @@ public class User implements Parcelable{
         parcel.writeDouble(limitPotassium);
         parcel.writeDouble(limitWater);
         parcel.writeDouble(limitSodium);
+        parcel.writeList(consumptions);
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Creator<User>() {

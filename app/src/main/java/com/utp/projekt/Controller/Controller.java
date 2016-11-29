@@ -14,7 +14,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class Controller {
     private static AsyncHttpClient client = new AsyncHttpClient();
-    private static String ip = "http://83.25.152.42:10125/";
+    private static String ip = "http://dialisys.azurewebsites.net/";
 
 
     public static void callServiceJSON(String db, String [] params, JsonHttpResponseHandler handler){

@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         user = getIntent().getParcelableExtra("USER");
-        Log.i("asd", user.getPotassium() + "");
+        Log.i("asd", user.getConsumptions().toString());
         name = (TextView) findViewById(R.id.name);
         name.setText("Witaj: " + user.getFirstName() + " " + user.getLastName());
         buttonLimit = (Button) findViewById(R.id.limit);

@@ -3,6 +3,7 @@ package com.utp.projekt.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,13 +11,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.utp.projekt.Controller.Controller;
+import com.utp.projekt.Entities.Consumption;
 import com.utp.projekt.Entities.User;
 import com.utp.projekt.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -59,6 +65,11 @@ public class LoginActivity extends Activity {
                                 Gson gson = new Gson();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 User user = gson.fromJson(response.toString(), User.class);
+                                try {
+                                    user.setConsumptions(gson.fromJson(response.getJSONArray("consumed").toString(), new ArrayList<Consumption>().getClass()));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                                 intent.putExtra("USER", user);
                                 startActivity(intent);
                             }
