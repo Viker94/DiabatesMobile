@@ -15,13 +15,16 @@ import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.utp.projekt.Controller.Controller;
 import com.utp.projekt.Entities.Consumption;
+import com.utp.projekt.Entities.Products;
 import com.utp.projekt.Entities.User;
 import com.utp.projekt.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -66,7 +69,13 @@ public class LoginActivity extends Activity {
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 User user = gson.fromJson(response.toString(), User.class);
                                 try {
-                                    user.setConsumptions(gson.fromJson(response.getJSONArray("consumed").toString(), new ArrayList<Consumption>().getClass()));
+                                    JSONArray array = response.getJSONArray("consumed");
+                                    ArrayList<Consumption> consumed = new ArrayList<Consumption>();
+                                    for(int i = 0; i<array.length();i++){
+                                        consumed.add(new Consumption(array.getJSONObject(i).getLong("id"), gson.fromJson(array.getJSONObject(i).getString("product").toString(), Products.class), new Date(array.getJSONObject(i).getLong("date")), array.getJSONObject(i).getInt("amount")));
+                                    }
+                                    Log.i("LISTA", consumed.toString());
+                                    user.setConsumptions(consumed);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

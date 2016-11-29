@@ -35,7 +35,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         user = getIntent().getParcelableExtra("USER");
-        Log.i("asd", user.getConsumptions().toString());
+        Log.i("MAIN", user.getConsumptions().get(0).toString());
         name = (TextView) findViewById(R.id.name);
         name.setText("Witaj: " + user.getFirstName() + " " + user.getLastName());
         buttonLimit = (Button) findViewById(R.id.limit);
@@ -66,7 +66,6 @@ public class MainActivity extends Activity {
                 startGraphActivity();
             }
         });
-
     }
     @Override
     protected void onResume() {

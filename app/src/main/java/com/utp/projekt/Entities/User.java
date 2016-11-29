@@ -19,7 +19,7 @@ public class User implements Parcelable{
     private double limitPotassium;
     private double limitWater;
     private double limitSodium;
-    private ArrayList<Consumption> consumptions;
+    private ArrayList consumptions;
 
     public ArrayList<Consumption> getConsumptions() {
         return consumptions;
@@ -54,8 +54,7 @@ public class User implements Parcelable{
         this.limitPotassium = parcel.readDouble();
         this.limitWater = parcel.readDouble();
         this.limitSodium = parcel.readDouble();
-        consumptions = new ArrayList<>();
-        parcel.readList(consumptions, Consumption.class.getClassLoader());
+        this.consumptions = parcel.readArrayList(Consumption.class.getClassLoader());
     }
 
     public Long getId() {

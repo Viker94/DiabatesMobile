@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.jjoe64.graphview.GraphView;
@@ -19,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -47,7 +49,9 @@ public class GraphActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
         user =  getIntent().getParcelableExtra("USER");
+        Log.i("GRAPH1", user.getConsumptions().get(0).toString());
         GraphView graph = (GraphView) findViewById(R.id.graph);
+        Log.i("GRAPH2", user.getConsumptions().get(0).toString());
 
         /*Potas - kolor czerwony*/
         potassiumLimit = new LineGraphSeries<DataPoint>();
@@ -73,10 +77,13 @@ public class GraphActivity extends Activity {
         water.setColor(Color.BLUE);
         water.setThickness(2);
         /* Koniec DataPointow */
+        Log.i("GRAPH3", user.getConsumptions().get(0).toString());
 
 
+        double x = user.getConsumptions().get(0).getProduct().getSodium();
 
-        potassium.appendData(new DataPoint(1, user.getConsumptions().get(0).getProduct().getSodium()),false,100);
+        Log.i("asd", user.getClass().toString() + " " + user.getConsumptions().getClass().toString());
+        potassium.appendData(new DataPoint(1, x),false,100);
         graph.addSeries(potassium);
 
 

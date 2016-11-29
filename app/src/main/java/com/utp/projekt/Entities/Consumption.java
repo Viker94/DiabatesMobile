@@ -90,4 +90,14 @@ public class Consumption implements Parcelable {
         parcel.writeSerializable(date);
         parcel.writeInt(amount);
     }
+
+    @Override
+    public String toString() {
+        return "Consumption{" +
+                "id=" + id +
+                ", product=" + product +
+                ", date=" + date +
+                ", amount=" + amount +
+                '}';
+    }
 }
