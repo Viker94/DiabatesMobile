@@ -31,10 +31,12 @@ public class MainFragmentActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.viewpager);
         List<Fragment> fragments = new ArrayList<>();
+        fragments.add(Fragment.instantiate(this, CalendarActivity.class.getName()));
         fragments.add(Fragment.instantiate(this, MainActivity.class.getName()));
         fragments.add(Fragment.instantiate(this, GraphActivity.class.getName()));
         adapter = new PagerAdapter(super.getSupportFragmentManager(), fragments);
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
+        pager.setCurrentItem(1);
     }
 }

@@ -14,9 +14,5 @@ public class Calendar extends CalendarView {
         super(context);
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-    }
 
 }

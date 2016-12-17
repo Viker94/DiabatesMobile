@@ -11,12 +11,16 @@ import android.widget.CalendarView;
 import android.widget.TextView;
 
 import com.utp.projekt.R;
+import com.utp.projekt.Utils.Calendar;
+
+import java.util.Date;
 
 public class CalendarActivity extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Nullable
