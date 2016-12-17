@@ -64,8 +64,9 @@ public class LoginActivity extends Activity {
                             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                 Gson gson = new Gson();
                                 Intent intent = new Intent(LoginActivity.this, MainFragmentActivity.class);
-                                User user = gson.fromJson(response.toString(), User.class);
+                                User user = null;
                                 try {
+                                    user = new User(null, response.getString("firstName"), response.getLong("id"), response.getString("lastName"), response.getDouble("limitPotassium"), response.getDouble("limitSodium"), response.getDouble("limitWater"), new Date(response.getLong("nextVisit")), response.getDouble("potassium"), response.getDouble("sodium"), response.getDouble("water"));
                                     JSONArray array = response.getJSONArray("consumed");
                                     ArrayList<Consumption> consumed = new ArrayList<Consumption>();
                                     for(int i = 0; i<array.length();i++){

@@ -69,6 +69,7 @@ public class MainActivity extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_main2, container, false);
         user = getActivity().getIntent().getParcelableExtra("USER");
         Log.i("MAIN", user.getConsumptions().get(0).toString());
+        Log.i("MAIN", user.getNextVisit().toString());
         name = (TextView) rootView.findViewById(R.id.name);
         name.setText("Witaj: " + user.getFirstName() + " " + user.getLastName());
         buttonLimit = (Button) rootView.findViewById(R.id.limit);

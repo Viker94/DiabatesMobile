@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Marcin on 26.11.2016.
@@ -19,6 +20,7 @@ public class User implements Parcelable{
     private double limitPotassium;
     private double limitWater;
     private double limitSodium;
+    private Date nextVisit;
     private ArrayList consumptions;
 
     public ArrayList<Consumption> getConsumptions() {
@@ -29,19 +31,18 @@ public class User implements Parcelable{
         this.consumptions = consumptions;
     }
 
-
-
-    public User(Long id, String firstName, String lastName, double potassium, double water, double sodium, double limitPotassium, double limitWater, double limitSodium, ArrayList<Consumption> consumptions) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.potassium = potassium;
-        this.water = water;
-        this.sodium = sodium;
-        this.limitPotassium = limitPotassium;
-        this.limitWater = limitWater;
-        this.limitSodium = limitSodium;
+    public User(ArrayList consumptions, String firstName, Long id, String lastName, double limitPotassium, double limitSodium, double limitWater, Date nextVisit, double potassium, double sodium, double water) {
         this.consumptions = consumptions;
+        this.firstName = firstName;
+        this.id = id;
+        this.lastName = lastName;
+        this.limitPotassium = limitPotassium;
+        this.limitSodium = limitSodium;
+        this.limitWater = limitWater;
+        this.nextVisit = nextVisit;
+        this.potassium = potassium;
+        this.sodium = sodium;
+        this.water = water;
     }
 
     public User(Parcel parcel){
@@ -55,6 +56,7 @@ public class User implements Parcelable{
         this.limitWater = parcel.readDouble();
         this.limitSodium = parcel.readDouble();
         this.consumptions = parcel.readArrayList(Consumption.class.getClassLoader());
+        this.nextVisit = (Date) parcel.readSerializable();
     }
 
     public Long getId() {
@@ -128,6 +130,14 @@ public class User implements Parcelable{
         this.limitSodium = limitSodium;
     }
 
+    public Date getNextVisit() {
+        return nextVisit;
+    }
+
+    public void setNextVisit(Date nextVisit) {
+        this.nextVisit = nextVisit;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -145,6 +155,7 @@ public class User implements Parcelable{
         parcel.writeDouble(limitWater);
         parcel.writeDouble(limitSodium);
         parcel.writeList(consumptions);
+        parcel.writeSerializable(nextVisit);
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Creator<User>() {
