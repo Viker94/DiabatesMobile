@@ -29,8 +29,9 @@
         <activity
             android:name=".Activities.ProductsActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".Activities.LimitActivity"></activity>
-        <activity android:name=".Activities.GraphActivity"></activity>
+        <activity android:name=".Activities.LimitActivity" />
+        <activity android:name=".Activities.GraphActivity" />
+        <activity android:name=".Activities.HistoryActivity"></activity>
     </application>
 
 </manifest>

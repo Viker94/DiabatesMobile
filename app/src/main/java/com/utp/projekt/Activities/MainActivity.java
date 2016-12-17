@@ -35,6 +35,7 @@ public class MainActivity extends Fragment {
     private Space spacer;
     private Button buttonLimit;
     private Button eat;
+    private Button history;
 
 
     public static User user;
@@ -63,6 +64,12 @@ public class MainActivity extends Fragment {
         startActivity(intent);
     }
 
+    public void history(){
+        Intent intent = new Intent(getActivity(), HistoryActivity.class);
+        intent.putExtra("USER", user);
+        startActivity(intent);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -74,6 +81,7 @@ public class MainActivity extends Fragment {
         name.setText("Witaj: " + user.getFirstName() + " " + user.getLastName());
         buttonLimit = (Button) rootView.findViewById(R.id.limit);
         eat = (Button) rootView.findViewById(R.id.eat);
+        history = (Button) rootView.findViewById(R.id.history);
         pp = (ProgressBar) rootView.findViewById(R.id.pPotassium);
         pw = (ProgressBar) rootView.findViewById(R.id.pWater);
         ps = (ProgressBar) rootView.findViewById(R.id.pSodium);
@@ -101,6 +109,12 @@ public class MainActivity extends Fragment {
             @Override
             public void onClick(View view) {
                 openEat();
+            }
+        });
+        history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                history();
             }
         });
         return rootView;
