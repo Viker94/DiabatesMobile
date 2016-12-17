@@ -1,6 +1,7 @@
 package com.utp.projekt.Activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -28,6 +29,12 @@ import com.utp.projekt.Utils.Helper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,6 +64,99 @@ public class GraphActivity extends Fragment {
         return (int) (date.getTime() / (1000*60*60*24));
     }
     private int getDays(Long ms) { return (int) (ms/(1000*60*60*24));}
+    private boolean checkMap()
+    {
+        int day = getDays((new Date()).getTime());
+        double[] params = new double[3];
+        params[0] = user.getPotassium();
+        params[1] = user.getSodium();
+        params[2] = user.getWater();
+        if(map2.size()==0) return true;
+        Log.e("Exception", "1");
+        if(!(map2.containsKey(day))) return true;
+        Log.e("Exception", "2");
+        if(map2.containsKey(day))
+        {
+            if(map2.get(day)[0].doubleValue()!=params[0]) return true;
+            if(map2.get(day)[1].doubleValue()!=params[1]) return true;
+            if(map2.get(day)[2].doubleValue()!=params[2]) return true;
+        }
+        Log.e("Exception", "3");
+
+        return false;
+    }
+    private void writeToFile(User user,Context context) {
+        if(checkMap()) {
+            try {
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("history.diabetes", Context.MODE_APPEND));
+                outputStreamWriter.append(new Date().getTime() + "|" + user.getPotassium() + "|" + user.getSodium() + "|" + user.getWater() + "\n");
+                Log.e("Exception", "Saved: " + new Date().getTime() + "|" + user.getPotassium() + "|" + user.getSodium() + "|" + user.getWater());
+                outputStreamWriter.close();
+            } catch (IOException e) {
+                Log.e("Exception", "File write failed: " + e.toString());
+            }
+        }
+    }
+    // DATA | POTASIUM | SODIUM | WATER
+    // [0]  |    [1]   |   [2]  |  [3]
+    private HashMap<Integer,Double[]> readFromFile(Context context) {
+        HashMap<Integer,Double[]> retHashMap = new HashMap<Integer,Double[]>();
+        String ret = "";
+
+        try {
+            InputStream inputStream = context.openFileInput("history.diabetes");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    if(receiveString!="") {
+                        stringBuilder.append(receiveString);
+                        Double[] params = new Double[3];
+                        String[] stringSplited = new String[4];
+                        int day = -1337;
+
+                        try {
+                            Log.e("Exception", "Rec: " + receiveString);
+                            stringSplited = receiveString.split("\\|");
+                            //Log.e("x", "[day]: " +stringSplited[1]);
+                            //Log.e("x", "[day]: " + Long.valueOf(stringSplited[0]).longValue());
+                            params[0] = Double.valueOf(stringSplited[1]);
+                            Log.e("x", "[0]: " + params[0]);
+                            params[1] = Double.valueOf(stringSplited[2]);
+                            Log.e("x", "[1]: " + params[1]);
+                            params[2] = Double.valueOf(stringSplited[3]);
+                            Log.e("x", "[2]: " + params[2]);
+                            day = getDays(Long.valueOf(stringSplited[0]));
+
+                            Log.e("Exception", "Added: " + day + params);
+                            retHashMap.put(day, params);
+                        } catch (Exception e) {
+                            Log.e("Exception", "ErrorParsingString: " + e.toString());
+                        }
+
+
+                    }
+
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("Exception", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("Exception", "Can not read file: " + e.toString());
+        }
+
+        return retHashMap;
+    }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +181,7 @@ public class GraphActivity extends Fragment {
         paint.setColor(Color.RED);
         paint.setPathEffect(new DashPathEffect(new float[] { 4, 2, 4, 2 }, 0));
         limit.setCustomPaint(paint);
+
         /*Potas - kolor zolty*/
         potassium = new LineGraphSeries<DataPoint>();
         potassium.setColor(Helper.POTASSIUM_COLOR);
@@ -96,17 +197,42 @@ public class GraphActivity extends Fragment {
         water.setColor(Helper.WATER_COLOR);
         water.setThickness(10);
         /* Koniec DataPointow */
-        Log.i("GRAPH3", user.getConsumptions().get(0).toString());
 
         map2 = new HashMap<Integer,Double[]>();
-        SortedMap<Integer,Double[]> map = new TreeMap<Integer,Double[]>(map2);
-        double x = user.getConsumptions().get(0).getProduct().getSodium();
+        map2 = readFromFile(getContext());
+        writeToFile(user,getContext());
+        SortedMap<Integer,Double[]> map = new TreeMap<Integer,Double[]>();
         Calendar ca = Calendar.getInstance();
+        int day = getDays(ca.getTime().getTime());
+        for( Integer i : map2.keySet())
+        {
+            if(day-i<10)
+            {
+                map.put(day-i,map2.get(i));
+            }
+        }
+        for(int i = -6 ; i<=0;i++)
+        {
+            if(map.containsKey(i))
+            {
+                Ypotassium = map.get(i)[0];
+                Ysodium = map.get(i)[1];
+                Ywater = map.get(i)[2];
 
-        Long today = ca.getTime().getTime();
-        Log.i("Dzisiaj CALENDAR",getDays(today)+""+ca.getTime().toString());
+            }
+            else
+            {
+                Ypotassium = 0;
+                Ysodium = 0;
+                Ywater = 0;
+            }
+            potassium.appendData(new DataPoint(i, (Ypotassium / user.getLimitPotassium()) * 100), false, 10);
+            sodium.appendData(new DataPoint(i, ((Ysodium) / user.getLimitSodium()) * 100), false, 10);
+            water.appendData(new DataPoint(i, ((Ywater) / user.getLimitWater()) * 100), false, 10);
+        }
 
-        Log.i("Dzisiaj new Date()",getDays(new Date())+" "+(new Date()).toString());
+        //Stare z produktami moze przyda sie kiedys
+        /*
         int day = 0;
         Log.i("asd", user.getClass().toString() + " " + user.getConsumptions().getClass().toString());
         for(Consumption c : user.getConsumptions())
@@ -135,9 +261,7 @@ public class GraphActivity extends Fragment {
 
         }
 
-        /*
-        Ilosc/Limit*100
-         */
+
 
         int smallest = 10;
         Log.i("Date",new Date(2016,11,29).getTime()+"");
@@ -157,12 +281,8 @@ public class GraphActivity extends Fragment {
             }
 
         }
-        /*
-        potassium.appendData(new DataPoint(1, ((map.get(smallest)[0]) / user.getLimitPotassium()) * 100), false, 10);
-        sodium.appendData(new DataPoint(1, ((map.get(smallest)[1]) / user.getLimitSodium()) * 100), false, 10);
-        water.appendData(new DataPoint(1, ((map.get(smallest)[2]) / user.getLimitWater()) * 100), false, 10);*/
-        //potassium.appendData(new DataPoint(1, x),false,100);
-        //potassium.appendData(new DataPoint(10, x),false,100);
+
+        */
         limit.appendData(new DataPoint(-6,100),false,10);
         limit.appendData(new DataPoint(1,100),false,10);
         graph.getViewport().setMinX(-6);
