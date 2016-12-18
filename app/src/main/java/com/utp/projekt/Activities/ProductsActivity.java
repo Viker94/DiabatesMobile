@@ -57,10 +57,10 @@ public class ProductsActivity extends Activity{
         other = (Button) findViewById(R.id.other);
         list = (ListView) findViewById(R.id.list);
         search = (EditText) findViewById(R.id.search);
-        final ArrayList<Products> products = getIntent().getParcelableArrayListExtra("TAB");
+        final ArrayList<Products> products = getIntent().getParcelableArrayListExtra("TAB"); //zczytanie listy produktów
         adapter = new RowAdapter(this, R.layout.products_rows, products);
         list.setAdapter(adapter);
-        search.addTextChangedListener(new TextWatcher() {
+        search.addTextChangedListener(new TextWatcher() { //w momencie kiedy zmienia się zawartość okienka do wyszukiwania, zmienia się filtrowanie listy
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -78,7 +78,7 @@ public class ProductsActivity extends Activity{
         });
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) { //ustawienie możliwości klikania w obiekty listy i wywoływanie okienka
                 final Products p = (Products) adapterView.getItemAtPosition(i);
                 AlertDialog.Builder alert = new AlertDialog.Builder(ProductsActivity.this);
                 alert.setTitle("Wybierz ilość");

@@ -21,7 +21,6 @@ public class CalendarActivity extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Nullable
@@ -30,11 +29,11 @@ public class CalendarActivity extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_calendar, container, false);
         CalendarView calendar = (CalendarView) rootView.findViewById(R.id.calendarView2);
         TextView text = (TextView) rootView.findViewById(R.id.date);
-        calendar.setDate(MainActivity.user.getNextVisit().getTime());
+        calendar.setDate(MainActivity.user.getNextVisit().getTime()); //ustawienie podświetlonej daty na kalendarzu
         Date today = new Date();
-        long diff = MainActivity.user.getNextVisit().getTime() - today.getTime();
-        long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-        if(days>0) {
+        long diff = MainActivity.user.getNextVisit().getTime() - today.getTime(); //różnica w czasie (ms)
+        long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS); //różnica w czasie (dni)
+        if(days>0) { //ustawianie tekstu w zależności od ilości dni
             text.setText("Do następnej wizyty pozostało: " + days + " dni");
         } else if(days == 0){
             text.setText("Dziś masz kolejną wizytę!");

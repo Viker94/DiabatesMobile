@@ -39,7 +39,7 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         login = (TextView)findViewById(R.id.login);
         password = (EditText) findViewById(R.id.password);
-        login.setText("login");
+        login.setText("login"); //ustawienie zawartości pola na dany tekst
         password.setText("passwd");
         loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -53,19 +53,20 @@ public class LoginActivity extends Activity {
     public void connectToController(){
         if(!login.getText().toString().equals("") && !password.getText().toString().equals("")) {
             final String[] params = {login.getText().toString(), password.getText().toString()};
-            Controller.callServiceJSON("login", params, new JsonHttpResponseHandler(){
+            Controller.callServiceJSON("login", params, new JsonHttpResponseHandler(){ //wysłanie zapytania na serwer z loginem i hasłem
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     String[] params2;
                     try {
                         params2 = new String[]{response.getLong("id") + ""};
-                        Controller.callServiceJSON("user", params2, new JsonHttpResponseHandler(){
+                        Controller.callServiceJSON("user", params2, new JsonHttpResponseHandler(){ //wysłanie kolejnego zapytania na serwer
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                 Gson gson = new Gson();
                                 Intent intent = new Intent(LoginActivity.this, MainFragmentActivity.class);
                                 User user = null;
                                 try {
+                                    //zczytanie danych usera
                                     user = new User(null, response.getString("firstName"), response.getLong("id"), response.getString("lastName"), response.getDouble("limitPotassium"), response.getDouble("limitSodium"), response.getDouble("limitWater"), new Date(response.getLong("nextVisit")), response.getDouble("potassium"), response.getDouble("sodium"), response.getDouble("water"));
                                     JSONArray array = response.getJSONArray("consumed");
                                     ArrayList<Consumption> consumed = new ArrayList<Consumption>();
@@ -76,8 +77,9 @@ public class LoginActivity extends Activity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                                //dodanie danych do kolejnego activity
                                 intent.putExtra("USER", user);
-                                startActivity(intent);
+                                startActivity(intent); //uruchomienie activity
                             }
 
                             @Override

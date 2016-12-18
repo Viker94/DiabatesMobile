@@ -39,17 +39,18 @@ public class HistoryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-        final User user = getIntent().getParcelableExtra("USER");
+        final User user = getIntent().getParcelableExtra("USER"); //zczytanie usera
         final Context context = this;
-        spinner = (Spinner) findViewById(R.id.spinner);
+        spinner = (Spinner) findViewById(R.id.spinner); //lista rozwijana
         list = (ListView) findViewById(R.id.listProducts);
-        List<Date> datesBefore = new ArrayList<>();
+        List<Date> datesBefore = new ArrayList<>(); //lista z datami z bazy danych
         LinkedHashSet<String> datesStringSet = new LinkedHashSet<>();
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         for(Consumption c : user.getConsumptions()){
-            datesBefore.add(c.getDate());
-            datesStringSet.add(format.format(c.getDate()));
+            datesBefore.add(c.getDate()); //zczytanie dat z bazy
+            datesStringSet.add(format.format(c.getDate())); //przerobienie ich na stringa
         }
+        //wyrzucenie duplikatów dat
         for(int i = 0; i < datesBefore.size(); i++){
             for(int j = 0; j < datesBefore.size(); j++){
                 if(i!=j){
@@ -66,23 +67,24 @@ public class HistoryActivity extends Activity {
             }
         }
         final List<Date> dates = new ArrayList<>(datesBefore);
-        Collections.sort(dates);
+        Collections.sort(dates); //sortowanie od najmniejszej do największej a następnie odwrócenie
         Collections.reverse(dates);
         List<String> datesString = new ArrayList<>(datesStringSet);
         Log.i("D1", dates.toString());
         Log.i("D2", datesString.toString());
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, datesString);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, datesString); //przypisanie do adaptera
         spinner.setAdapter(adapter);
         try {
             Field popup = Spinner.class.getDeclaredField("mPopup");
             popup.setAccessible(true);
             android.widget.ListPopupWindow popupWindow = (android.widget.ListPopupWindow) popup.get(spinner);
-            popupWindow.setHeight(500);
+            popupWindow.setHeight(500); //określenie wielkości listy rozwijanej
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        //cześć obsługująca klikanie w listę rozwijaną
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

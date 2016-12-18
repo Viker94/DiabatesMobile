@@ -8,7 +8,9 @@ import java.util.Date;
 /**
  * Created by ninjo on 28.11.2016.
  */
-
+/*
+Klasa oparta na tabeli z bazy danych
+ */
 public class Consumption implements Parcelable {
     private Long id;
     private Products product;

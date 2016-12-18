@@ -4,6 +4,9 @@ package com.utp.projekt.Utils;
  * Created by Marcin on 26.11.2016.
  */
 
+/*
+Klasa aby łatwiej ogarniać typy jedzenia
+ */
 public class Category {
     public static final int FRUIT = 0;
     public static final int VEGETABLE = 1;

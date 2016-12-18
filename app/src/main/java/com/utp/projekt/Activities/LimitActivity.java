@@ -81,7 +81,7 @@ public class LimitActivity extends Activity {
         params[3] = String.valueOf(MainActivity.user.getLimitSodium());
 
 
-        Controller.callServicAsync("user",params,new AsyncHttpResponseHandler(){
+        Controller.callServicAsync("user",params,new AsyncHttpResponseHandler(){ //zapisanie limitów do bazy
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Toast.makeText(getApplicationContext(), "Zapisano limity", Toast.LENGTH_LONG).show();

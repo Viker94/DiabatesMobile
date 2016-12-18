@@ -22,6 +22,10 @@ import com.utp.projekt.Utils.PagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+Klasa tworząca fragmety ekranu. Umożliwia to przesuwanie w lewo i prawo ekranu.
+ */
+
 public class MainFragmentActivity extends FragmentActivity {
 
     private PagerAdapter adapter;
@@ -30,13 +34,13 @@ public class MainFragmentActivity extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.viewpager);
-        List<Fragment> fragments = new ArrayList<>();
-        fragments.add(Fragment.instantiate(this, CalendarActivity.class.getName()));
+        List<Fragment> fragments = new ArrayList<>(); //lista fragmentów
+        fragments.add(Fragment.instantiate(this, CalendarActivity.class.getName())); //dodanie 3 fragmentów
         fragments.add(Fragment.instantiate(this, MainActivity.class.getName()));
         fragments.add(Fragment.instantiate(this, GraphActivity.class.getName()));
-        adapter = new PagerAdapter(super.getSupportFragmentManager(), fragments);
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        adapter = new PagerAdapter(super.getSupportFragmentManager(), fragments); //utworzenie adaptera z listą fragmentów
+        ViewPager pager = (ViewPager) findViewById(R.id.pager); //obiekt obsługujący fragmenty
         pager.setAdapter(adapter);
-        pager.setCurrentItem(1);
+        pager.setCurrentItem(1); //ustawienie na środkowy (1) fragment, daje to złudzenie, że jeden ekran jest na lewo drugi na prawo.
     }
 }

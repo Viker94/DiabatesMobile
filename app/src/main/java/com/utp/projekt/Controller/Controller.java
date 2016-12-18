@@ -14,9 +14,10 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class Controller {
     private static AsyncHttpClient client = new AsyncHttpClient();
-    private static String ip = "http://dialisys.azurewebsites.net/";
+    private static String ip = "http://dialisys.azurewebsites.net/"; //ip serwera
 
 
+    //funkcje odpowiedzialne za łączenie się z serwerem z podanymi parametrami
     public static void callServiceJSON(String db, String [] params, JsonHttpResponseHandler handler){
         String url = ip + db;
         for(String param : params){
@@ -33,6 +34,7 @@ public class Controller {
         client.get(url, handler);
     }
 
+    //funkcja wyświetlająca napisy niepowodzeń
     public static void failure(int statusCode, Context context){
         if(statusCode == 404){
             Toast.makeText(context, "Nie znaleziono źródła", Toast.LENGTH_LONG).show();

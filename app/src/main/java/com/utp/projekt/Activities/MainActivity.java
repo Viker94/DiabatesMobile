@@ -33,9 +33,9 @@ public class MainActivity extends Fragment {
     private TextView tw;
     private TextView ts;
     private Space spacer;
-    private Button buttonLimit;
-    private Button eat;
-    private Button history;
+    private Button buttonLimit; //przycisk limitów
+    private Button eat; //przycisk do posiłków
+    private Button history; //przycisk historii
 
 
     public static User user;
@@ -51,20 +51,20 @@ public class MainActivity extends Fragment {
     }
 
 
-    public void startLimitActivity()
+    public void startLimitActivity() //metoda startująca cześć z limitami
     {
         Intent intent = new Intent(getActivity(), LimitActivity.class);
         intent.putExtra("USER", user);
         startActivity(intent);
     }
 
-    public void openEat(){
+    public void openEat(){ //posiłki
         Intent intent = new Intent(getActivity(), EatActivity.class);
         intent.putExtra("USER", user);
         startActivity(intent);
     }
 
-    public void history(){
+    public void history(){ //historia
         Intent intent = new Intent(getActivity(), HistoryActivity.class);
         intent.putExtra("USER", user);
         startActivity(intent);
@@ -74,11 +74,11 @@ public class MainActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_main2, container, false);
-        user = getActivity().getIntent().getParcelableExtra("USER");
+        user = getActivity().getIntent().getParcelableExtra("USER"); //zczytanie usera
         Log.i("MAIN", user.getConsumptions().get(0).toString());
         Log.i("MAIN", user.getNextVisit().toString());
         name = (TextView) rootView.findViewById(R.id.name);
-        name.setText("Witaj: " + user.getFirstName() + " " + user.getLastName());
+        name.setText("Witaj: " + user.getFirstName() + " " + user.getLastName()); //przypisanie tekstu
         buttonLimit = (Button) rootView.findViewById(R.id.limit);
         eat = (Button) rootView.findViewById(R.id.eat);
         history = (Button) rootView.findViewById(R.id.history);
@@ -88,14 +88,14 @@ public class MainActivity extends Fragment {
         tp = (TextView) rootView.findViewById(R.id.ppPotassium);
         tw = (TextView) rootView.findViewById(R.id.ppWater);
         ts = (TextView) rootView.findViewById(R.id.ppSodium);
-        pp.setProgressTintList(ColorStateList.valueOf(Helper.POTASSIUM_COLOR));
+        pp.setProgressTintList(ColorStateList.valueOf(Helper.POTASSIUM_COLOR)); //ustawianie kolorów dla pasków
         pw.setProgressTintList(ColorStateList.valueOf(Helper.WATER_COLOR));
         ps.setProgressTintList(ColorStateList.valueOf(Helper.SODIUM_COLOR));
 
-        pp.setProgress((int)((user.getPotassium()/user.getLimitPotassium())*100));
+        pp.setProgress((int)((user.getPotassium()/user.getLimitPotassium())*100)); //obliczanie zawartości w % dla substancji
         pw.setProgress((int)((user.getWater()/user.getLimitWater())*100));
         ps.setProgress((int)((user.getSodium()/user.getLimitSodium())*100));
-        tp.setText((int)((user.getPotassium()/user.getLimitPotassium())*100) + "%");
+        tp.setText((int)((user.getPotassium()/user.getLimitPotassium())*100) + "%"); //ustawienie tekstu
         tw.setText((int)((user.getWater()/user.getLimitWater())*100) + "%");
         ts.setText((int)((user.getSodium()/user.getLimitSodium())*100) + "%");
 
@@ -104,7 +104,7 @@ public class MainActivity extends Fragment {
             public void onClick(View view) {
                 startLimitActivity();
             }
-        });
+        }); //przypisanie funkcji do przycisków
         eat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
