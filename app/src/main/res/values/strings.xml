@@ -22,4 +22,6 @@
     <string name="kasze">Kasze</string>
     <string name="mi_so">Mięso</string>
     <string name="s_odycze">Słodycze</string>
+    <string name="drawer_open">Otwórz panel nawigacyjny</string>
+    <string name="drawer_close">Zamknij panel nawigacyjny</string>
 </resources>
