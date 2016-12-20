@@ -69,6 +69,11 @@ public class EatActivity extends Activity{
         user = getIntent().getParcelableExtra("USER");
         if(map.size()>0){
             for ( Products key : map.keySet() ) {
+                p=user.getPotassium();w=user.getWater();s=user.getSodium();
+                p+=key.getPotassium()*map.get(key);
+                
+                w+=key.getWater()*map.get(key);
+                s+=key.getSodium()*map.get(key);
 
                 final String[] params = {user.getId().toString(),key.getId().toString(),map.get(key).toString()};
                 Controller.callServicAsync("consumption", params, new AsyncHttpResponseHandler() {
@@ -91,14 +96,8 @@ public class EatActivity extends Activity{
 
         }
 
-        p=0;w=0;s=0;
 
-        for(Consumption c : user.getConsumptions()){
-            ilosc=c.getAmount();
-            p +=c.getProduct().getPotassium()*ilosc;
-            w +=c.getProduct().getWater()*ilosc;
-            s +=c.getProduct().getSodium()*ilosc;
-        }
+
         String[] params = {user.getId().toString(), p + "", w + "", s + ""};
         Controller.callServicAsync("userSubs", params, new AsyncHttpResponseHandler() {
             @Override
