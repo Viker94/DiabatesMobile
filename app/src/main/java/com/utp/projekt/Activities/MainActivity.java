@@ -17,10 +17,17 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Space;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.utp.projekt.Controller.Controller;
+import com.utp.projekt.Entities.Consumption;
+import com.utp.projekt.Entities.Products;
 import com.utp.projekt.Entities.User;
 import com.utp.projekt.R;
 import com.utp.projekt.Utils.Helper;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by Marcin on 29.11.2016.
@@ -29,27 +36,31 @@ import com.utp.projekt.Utils.Helper;
 public class MainActivity extends Fragment {
 
     private TextView name; //przywitanie
-    private ProgressBar pp; //progress bary dla potasu, wody i sodu
-    private ProgressBar pw;
-    private ProgressBar ps;
-    private TextView tp; //textview dla liczby obok progress bara
-    private TextView tw;
-    private TextView ts;
+    private static ProgressBar pp; //progress bary dla potasu, wody i sodu
+    private static ProgressBar pw;
+    private static ProgressBar ps;
+    private static TextView tp; //textview dla liczby obok progress bara
+    private static TextView tw;
+    private static TextView ts;
     private Space spacer;
     private Button buttonLimit; //przycisk limitów
     private Button eat; //przycisk do posiłków
     private Button history; //przycisk historii
+    private Button bWater;
 
-
+    private double water;
+    private int sub=20;  ///wartość o ile odejmujemy
     public static User user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
     @Override
     public void onResume() {
+        refreshLimits();
         super.onResume();
         this.onCreate(null);
     }
@@ -86,6 +97,7 @@ public class MainActivity extends Fragment {
         buttonLimit = (Button) rootView.findViewById(R.id.limit);
         eat = (Button) rootView.findViewById(R.id.eat);
         history = (Button) rootView.findViewById(R.id.history);
+        bWater = (Button) rootView.findViewById(R.id.bWater);
         pp = (ProgressBar) rootView.findViewById(R.id.pPotassium);
         pw = (ProgressBar) rootView.findViewById(R.id.pWater);
         ps = (ProgressBar) rootView.findViewById(R.id.pSodium);
@@ -96,12 +108,31 @@ public class MainActivity extends Fragment {
         pw.setProgressTintList(ColorStateList.valueOf(Helper.WATER_COLOR));
         ps.setProgressTintList(ColorStateList.valueOf(Helper.SODIUM_COLOR));
 
-        pp.setProgress((int)((user.getPotassium()/user.getLimitPotassium())*100)); //obliczanie zawartości w % dla substancji
-        pw.setProgress((int)((user.getWater()/user.getLimitWater())*100));
-        ps.setProgress((int)((user.getSodium()/user.getLimitSodium())*100));
-        tp.setText((int)((user.getPotassium()/user.getLimitPotassium())*100) + "%"); //ustawienie tekstu
-        tw.setText((int)((user.getWater()/user.getLimitWater())*100) + "%");
-        ts.setText((int)((user.getSodium()/user.getLimitSodium())*100) + "%");
+        refreshLimits();
+
+        bWater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                water= (int) user.getWater();
+                if(water<sub) water=0;
+                else
+                    water-=sub;
+                String[] params = {user.getId().toString(), water + ""};
+                Controller.callServicAsync("userWater", params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        Toast.makeText(getContext(), "Usnięto część wody", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        Controller.failure(statusCode, getContext());
+                    }
+                });
+                user.setWater(water);
+                refreshLimits();
+            }
+        });
 
         buttonLimit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,4 +154,14 @@ public class MainActivity extends Fragment {
         });
         return rootView;
     }
+
+
+
+    public static void refreshLimits(){
+        pp.setProgress((int)((user.getPotassium()/user.getLimitPotassium())*100)); //obliczanie zawartości w % dla substancji
+        pw.setProgress((int)((user.getWater()/user.getLimitWater())*100));
+        ps.setProgress((int)((user.getSodium()/user.getLimitSodium())*100));
+        tp.setText((int)((user.getPotassium()/user.getLimitPotassium())*100) + "%"); //ustawienie tekstu
+        tw.setText((int)((user.getWater()/user.getLimitWater())*100) + "%");
+        ts.setText((int)((user.getSodium()/user.getLimitSodium())*100) + "%");}
 }

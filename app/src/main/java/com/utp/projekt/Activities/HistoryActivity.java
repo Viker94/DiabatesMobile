@@ -51,15 +51,17 @@ public class HistoryActivity extends Activity {
             datesStringSet.add(format.format(c.getDate())); //przerobienie ich na stringa
         }
         //wyrzucenie duplikatów dat
+        for(int k = 0; k < 2; k++)
         for(int i = 0; i < datesBefore.size(); i++){
             for(int j = 0; j < datesBefore.size(); j++){
                 if(i!=j){
-                    Date date1 = datesBefore.get(j);
-                    Date date2 = datesBefore.get(i);
+                    Date date1 = datesBefore.get(i);
+                    Date date2 = datesBefore.get(j);
                     Calendar cal1 = Calendar.getInstance();
                     Calendar cal2 = Calendar.getInstance();
                     cal1.setTime(date1);
                     cal2.setTime(date2);
+
                     if(cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) && cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH)){
                         datesBefore.remove(i);
                     }

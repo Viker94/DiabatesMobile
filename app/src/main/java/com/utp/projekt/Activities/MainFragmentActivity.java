@@ -103,6 +103,10 @@ public class MainFragmentActivity extends AppCompatActivity{
                 });
 
                 dialog.dismiss();
+                MainActivity.user.setPotassium(0);
+                MainActivity.user.setWater(0);
+                MainActivity.user.setSodium(0);
+                MainActivity.refreshLimits();
             }
 
         });

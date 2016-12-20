@@ -120,19 +120,19 @@ public class GraphActivity extends Fragment {
                         int day = -1337;
 
                         try {
-                            Log.e("Exception", "Rec: " + receiveString);
+                            //Log.e("Exception", "Rec: " + receiveString);
                             stringSplited = receiveString.split("\\|");
                             //Log.e("x", "[day]: " +stringSplited[1]);
                             //Log.e("x", "[day]: " + Long.valueOf(stringSplited[0]).longValue());
                             params[0] = Double.valueOf(stringSplited[1]);
-                            Log.e("x", "[0]: " + params[0]);
+                            //Log.e("x", "[0]: " + params[0]);
                             params[1] = Double.valueOf(stringSplited[2]);
-                            Log.e("x", "[1]: " + params[1]);
+                            //Log.e("x", "[1]: " + params[1]);
                             params[2] = Double.valueOf(stringSplited[3]);
-                            Log.e("x", "[2]: " + params[2]);
+                            //Log.e("x", "[2]: " + params[2]);
                             day = getDays(Long.valueOf(stringSplited[0]));
 
-                            Log.e("Exception", "Added: " + day + params);
+                            //Log.e("Exception", "Added: " + day + params);
                             retHashMap.put(day, params);
                         } catch (Exception e) {
                             Log.e("Exception", "ErrorParsingString: " + e.toString());
